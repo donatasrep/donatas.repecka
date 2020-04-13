@@ -3,34 +3,34 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Spectral Normalization | Deep learning</title>
+<title>Hands-on Spectral Normalization | Deep learning</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Spectral Normalization" />
+<meta property="og:title" content="Hands-on Spectral Normalization" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="A litttle bit about spectral normalzation" />
-<meta property="og:description" content="A litttle bit about spectral normalzation" />
+<meta name="description" content="A brief explanation and some code snippets related to spectral normalization" />
+<meta property="og:description" content="A brief explanation and some code snippets related to spectral normalization" />
 <link rel="canonical" href="https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html" />
 <meta property="og:url" content="https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html" />
 <meta property="og:site_name" content="Deep learning" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-04-08T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"A litttle bit about spectral normalzation","headline":"Spectral Normalization","dateModified":"2020-04-08T00:00:00-05:00","datePublished":"2020-04-08T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html"},"url":"https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html","@context":"https://schema.org"}</script>
+{"description":"A brief explanation and some code snippets related to spectral normalization","headline":"Hands-on Spectral Normalization","dateModified":"2020-04-08T00:00:00-05:00","datePublished":"2020-04-08T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html"},"url":"https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/donatas.repecka/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://donatasrep.github.io/donatas.repecka/feed.xml" title="Deep learning" /><link rel="shortcut icon" type="image/x-icon" href="/donatas.repecka/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Spectral Normalization | Deep learning</title>
+<title>Hands-on Spectral Normalization | Deep learning</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Spectral Normalization" />
+<meta property="og:title" content="Hands-on Spectral Normalization" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="A litttle bit about spectral normalzation" />
-<meta property="og:description" content="A litttle bit about spectral normalzation" />
+<meta name="description" content="A brief explanation and some code snippets related to spectral normalization" />
+<meta property="og:description" content="A brief explanation and some code snippets related to spectral normalization" />
 <link rel="canonical" href="https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html" />
 <meta property="og:url" content="https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html" />
 <meta property="og:site_name" content="Deep learning" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-04-08T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"A litttle bit about spectral normalzation","headline":"Spectral Normalization","dateModified":"2020-04-08T00:00:00-05:00","datePublished":"2020-04-08T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html"},"url":"https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html","@context":"https://schema.org"}</script>
+{"description":"A brief explanation and some code snippets related to spectral normalization","headline":"Hands-on Spectral Normalization","dateModified":"2020-04-08T00:00:00-05:00","datePublished":"2020-04-08T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html"},"url":"https://donatasrep.github.io/donatas.repecka/2020/04/08/spectral-norm.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -101,13 +101,13 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Spectral Normalization</h1><p class="page-description">A litttle bit about spectral normalzation</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-08T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Hands-on Spectral Normalization</h1><p class="page-description">A brief explanation and some code snippets related to spectral normalization</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-08T00:00:00-05:00" itemprop="datePublished">
         Apr 8, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      7 min read
+      8 min read
     
 </span></p>
 
@@ -170,26 +170,32 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>In my previous post I have walked through changes proposed in <a href="https://arxiv.org/abs/1701.07875">WGAN paper</a> skipping an import piece about Lipschitz constraint. In this post I will discuss the most effective (up to this day) technique to satisfy this constraint.</p>
-<p>As we talked in previous post, work of <a href="https://arxiv.org/abs/1701.07875">authors of WGAN paper</a> proposed to use the distance between the outputs of the discriminator as a proxy for distances between distributions. To put it simply, we want to measure how far two distributions are from each other. In order to be able to use the discriminator output as a proxy, we need to bound discriminator to be Lipschitz constrained.</p>
+<p>As we talked in previous post, work of <a href="https://arxiv.org/abs/1701.07875">the authors of WGAN paper</a> proposed to use the distance between the outputs of the discriminator as a proxy for distances between distributions. To put it simply, we want to measure how far two distributions are from each other. In order to be able to use the discriminator output as a proxy, we need to bound discriminator to be Lipschitz constrained.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Spectral-Normalization">Spectral Normalization<a class="anchor-link" href="#Spectral-Normalization"> </a></h2><p>Interestingly, <a href="https://arxiv.org/abs/1701.07875">authors of WGAN paper</a> turned to the AI scientific community for the best approach. And a year later the paper called <a href="https://arxiv.org/abs/1802.05957">Spectral Normalization for Generative Adversarial Networks</a> came out with a proposed solution. In comparison to previous attempts, this solution was superior due to its efficiency. So let's dig into it.</p>
+<h2 id="Spectral-Normalization">Spectral Normalization<a class="anchor-link" href="#Spectral-Normalization"> </a></h2><p>Interestingly, <a href="https://arxiv.org/abs/1701.07875">the authors of WGAN paper</a> turned to the AI scientific community for the best approach. And a year later the paper called <a href="https://arxiv.org/abs/1802.05957">Spectral Normalization for Generative Adversarial Networks</a> came out with a proposed solution. In comparison to previous attempts, this solution was superior due to its efficiency. So let's dig into it.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>So the Lipschitz constraint of the layer can be satisfied by dividing the weights of the layer with the largest singular value of the weights. A really nice explanation and proof can be found <a href="https://christiancosgrove.com/blog/2018/01/04/spectral-normalization-explained.html">here</a>.</p>
+<p>According to the paper, the Lipschitz constraint of the layer can be satisfied by dividing the weights of the layer by the largest singular value of the same weights. A really nice explanation and proof can be found <a href="https://christiancosgrove.com/blog/2018/01/04/spectral-normalization-explained.html">here</a>. Mathematically it looks like this:</p>
 <p>
 $$W=W/\sigma(W)$$
 </p>
 <p>where $\sigma(W)$  is the largest singular value of the weights $W$.</p>
-<p>An important thing is that if we do it for all layers, we will have a network that satisfies Lipschitz constraint.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>An important observation by the authors of the paper is that if we do it for all layers, we will have a network that satisfies Lipschitz constraint.</p>
 <p>Sounds simple enough, let's try it out.</p>
 
 </div>
@@ -282,7 +288,7 @@ $$W=W/\sigma(W)$$
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>1 loop, best of 3: 1 s per loop
+<pre>1 loop, best of 3: 1.02 s per loop
 </pre>
 </div>
 </div>
@@ -346,7 +352,7 @@ $$W=W/\sigma(W)$$
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>10 loops, best of 3: 74 ms per loop
+<pre>10 loops, best of 3: 72 ms per loop
 </pre>
 </div>
 </div>
@@ -366,7 +372,7 @@ $$W=W/\sigma(W)$$
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Authors of the paper proposed to use power iteration. This looks like this:
+<p>Luckly, The authors of the paper proposed an alternative solution to get the largest singular value. This technique is known as power iteration. This looks like this:
 
 $$ v = W^\intercal u / ||W^\intercal u||_2$$
 </p>
@@ -383,7 +389,7 @@ $$ W = W / u^\intercal W v$$
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>$u$ needs to be sampled from isotrpic distribution af the beginning and it's dimentions should match the dimentions of number of output channels.</p>
+<p>$u$ needs to be sampled from an isotropic distribution at the beginning and it's dimensions should match the dimensions of the number of output channels.</p>
 
 </div>
 </div>
@@ -535,7 +541,7 @@ $$ W = W / u^\intercal W v$$
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>52.80094999952003</pre>
+<pre>53.890708570486424</pre>
 </div>
 
 </div>
@@ -595,8 +601,7 @@ $$ W = W / u^\intercal W v$$
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>The slowest run took 7.84 times longer than the fastest. This could mean that an intermediate result is being cached.
-1000 loops, best of 3: 1.41 ms per loop
+<pre>100 loops, best of 3: 2.06 ms per loop
 </pre>
 </div>
 </div>
@@ -628,9 +633,8 @@ $$ W = W / u^\intercal W v$$
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>ERROR! Session/line number was not unique in database. History logging moved to new session 59
-Answer from numpy: 70.08763487143662
-Power iteration outcome 52.80094999952003
+<pre>Answer from numpy: 70.21844081626173
+Power iteration outcome 69.4230148155534
 </pre>
 </div>
 </div>
@@ -643,7 +647,8 @@ Power iteration outcome 52.80094999952003
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Well, it is fast, ~40x faster, but not as accurate. That is expected because power iteration only approximates the largest singular value. The more iterations you perform, the more accurate approximation you would get. Let’s see if that is true.</p>
+<p>Well, it is fast, ~40x faster, but it is not accurate. Well, that is expected because power iteration only approximates the largest singular value. The more iterations you perform, the more accurate approximation you would get.</p>
+<p>Let’s see if that is true.</p>
 
 </div>
 </div>
@@ -672,26 +677,26 @@ Power iteration outcome 52.80094999952003
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Power iteration estimate: 59.50 (actual: 70.09)
-Power iteration estimate: 62.86 (actual: 70.09)
-Power iteration estimate: 64.67 (actual: 70.09)
-Power iteration estimate: 65.75 (actual: 70.09)
-Power iteration estimate: 66.46 (actual: 70.09)
-Power iteration estimate: 66.96 (actual: 70.09)
-Power iteration estimate: 67.33 (actual: 70.09)
-Power iteration estimate: 67.62 (actual: 70.09)
-Power iteration estimate: 67.85 (actual: 70.09)
-Power iteration estimate: 68.03 (actual: 70.09)
-Power iteration estimate: 68.19 (actual: 70.09)
-Power iteration estimate: 68.32 (actual: 70.09)
-Power iteration estimate: 68.43 (actual: 70.09)
-Power iteration estimate: 68.52 (actual: 70.09)
-Power iteration estimate: 68.61 (actual: 70.09)
-Power iteration estimate: 68.68 (actual: 70.09)
-Power iteration estimate: 68.74 (actual: 70.09)
-Power iteration estimate: 68.80 (actual: 70.09)
-Power iteration estimate: 68.86 (actual: 70.09)
-Power iteration estimate: 68.91 (actual: 70.09)
+<pre>Power iteration estimate: 60.51 (actual: 70.22)
+Power iteration estimate: 63.85 (actual: 70.22)
+Power iteration estimate: 65.64 (actual: 70.22)
+Power iteration estimate: 66.69 (actual: 70.22)
+Power iteration estimate: 67.36 (actual: 70.22)
+Power iteration estimate: 67.82 (actual: 70.22)
+Power iteration estimate: 68.15 (actual: 70.22)
+Power iteration estimate: 68.40 (actual: 70.22)
+Power iteration estimate: 68.59 (actual: 70.22)
+Power iteration estimate: 68.74 (actual: 70.22)
+Power iteration estimate: 68.86 (actual: 70.22)
+Power iteration estimate: 68.97 (actual: 70.22)
+Power iteration estimate: 69.06 (actual: 70.22)
+Power iteration estimate: 69.13 (actual: 70.22)
+Power iteration estimate: 69.19 (actual: 70.22)
+Power iteration estimate: 69.25 (actual: 70.22)
+Power iteration estimate: 69.30 (actual: 70.22)
+Power iteration estimate: 69.35 (actual: 70.22)
+Power iteration estimate: 69.39 (actual: 70.22)
+Power iteration estimate: 69.42 (actual: 70.22)
 </pre>
 </div>
 </div>
@@ -704,16 +709,16 @@ Power iteration estimate: 68.91 (actual: 70.09)
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This is indeed the case. However, doing power iteration 20 times gets us close to <code>scipy</code> performance. Fortunately, <a href="https://arxiv.org/abs/1802.05957">Spectral Normalization paper</a> showed that you can do one or a small number of iterations per training step to get a good estimate throughout the entire training. Hence, even using naive numpy implementation we can get to +60ms (1.7ms*30) for each training iteration (assuming 30 layer network).</p>
+<p>This is indeed the case. However, doing power iteration 20 times gets us close to <code>scipy</code> performance. Fortunately, <a href="https://arxiv.org/abs/1802.05957">Spectral Normalization paper</a> showed that you can do one or a small number of iterations per training step to get a good estimate throughout the entire training (doing incremental work every step). Hence, even using naive numpy implementation we can get to only extra 60ms (1.7ms*30) for each training iteration (assuming 30 layer network).</p>
 <p>That does not sound too bad.</p>
-<p><em>Note: keep in mind that these performance numbers are relative, they do depend on hardware.</em></p>
+<p><em>Note: keep in mind that these performance numbers are relative, they will depend on hardware.</em></p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We can try to port this to tensorflow and measure its performance</p>
+<p>We can try to port this to tensorflow and measure its performance.</p>
 
 </div>
 </div>
@@ -726,9 +731,26 @@ Power iteration estimate: 68.91 (actual: 70.09)
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s1">&#39;GPU&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[PhysicalDevice(name=&#39;/physical_device:GPU:0&#39;, device_type=&#39;GPU&#39;)]</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -766,8 +788,8 @@ Power iteration estimate: 68.91 (actual: 70.09)
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">u_tf</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">512</span><span class="p">]),</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># Reshape is to keep tensorflow happy</span>
-<span class="n">w_tf</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">u_tf</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">stddev</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">512</span><span class="p">]),</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">w_tf</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="o">*</span><span class="mi">3</span><span class="o">*</span><span class="mi">256</span><span class="p">,</span> <span class="mi">512</span><span class="p">]),</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -798,8 +820,8 @@ Power iteration estimate: 68.91 (actual: 70.09)
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>The slowest run took 4.92 times longer than the fastest. This could mean that an intermediate result is being cached.
-1000 loops, best of 3: 946 µs per loop
+<pre>The slowest run took 65.11 times longer than the fastest. This could mean that an intermediate result is being cached.
+1000 loops, best of 3: 509 µs per loop
 </pre>
 </div>
 </div>
@@ -817,7 +839,8 @@ Power iteration estimate: 68.91 (actual: 70.09)
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sigma_tf</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_largets_singular_value_tf</span><span class="p">(</span><span class="n">u_tf</span><span class="p">,</span> <span class="n">w_tf</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+  <span class="n">sigma_tf</span><span class="p">,</span> <span class="n">u_tf</span> <span class="o">=</span> <span class="n">get_largets_singular_value_tf</span><span class="p">(</span><span class="n">u_tf</span><span class="p">,</span> <span class="n">w_tf</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sigma_tf</span><span class="p">)</span>
 </pre></div>
 
@@ -831,7 +854,7 @@ Power iteration estimate: 68.91 (actual: 70.09)
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>tf.Tensor([[59.49655843]], shape=(1, 1), dtype=float64)
+<pre>tf.Tensor([[69.43079]], shape=(1, 1), dtype=float32)
 </pre>
 </div>
 </div>
@@ -844,14 +867,7 @@ Power iteration estimate: 68.91 (actual: 70.09)
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>That is even better. 0.9ms, ~20x faster than naive numpy implementation. So if we assume 30 layers of similar size and one power iteration per training step, we only need ~3ms extra for the step. That is the reason why this technique is quite widely and successfully used. One of the most famous applications is <a href="https://arxiv.org/abs/1809.11096">Biggan</a>. All images below are generated by BigGAN architecture that uses Spectral Normalization.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="https://miro.medium.com/max/2468/1*Yw2KxjmIkj8yqS-ykLCQCQ.png" alt="alt text" /></p>
+<p>That is even better. 509µs with tensorflow implementation and executed on GPU (which usually is the case when you are training GANs). So if we assume 30 layers of similar size and one power iteration per training step, we only need ~15ms extra for the step. That is the reason why this technique is widely and successfully adopted.</p>
 
 </div>
 </div>
@@ -864,12 +880,12 @@ Power iteration estimate: 68.91 (actual: 70.09)
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Since the have all the pieces, we can create a layer wrapper to wrap any layer and perform power iteration on each feed forward pass.
+<p>Since we have all the pieces, we can create a layer wrapper to wrap any layer and perform power iteration on each feed forward pass.
 I have extended the code of <a href="https://medium.com/@FloydHsiu0618/spectral-normalization-implementation-of-tensorflow-2-0-keras-api-d9060d26de77">here</a>
-I have incorparated suggestions from the comments:</p>
+I have incorporated suggestions from the comments:</p>
 <ul>
-<li>Turned off power iterations during the inherence. This make sure that weights are being change then doing inherence.</li>
-<li>Used assigned operation instead of <code>=</code>. This speeds up the algorithm quite significantly (roughly by 35%).  </li>
+<li>Turned off power iterations during the inherence. This makes sure that weights are not being changed doing inherence.</li>
+<li>Used assigned operation instead of <code>=</code>. This speeds up the algorithm quite significantly (roughly by 35%). </li>
 </ul>
 
 </div>
@@ -877,7 +893,7 @@ I have incorparated suggestions from the comments:</p>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>I have also added a hack to support mixed precision. The final solution looks like this:</p>
+<p>Additionally I have also added a hack to support mixed precision as well as the logic to support embedding layers. The final solution looks like this:</p>
 
 </div>
 </div>
@@ -960,6 +976,82 @@ I have incorparated suggestions from the comments:</p>
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And the way you use is:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dense_sn</span> <span class="o">=</span> <span class="n">SpectralNormalizationV2</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+
+<span class="n">conv_sn</span> <span class="o">=</span> <span class="n">SpectralNormalizationV2</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">emb_sn</span> <span class="o">=</span> <span class="n">SpectralNormalizationV2</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">output_dim</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I have also checked the performance in comparison to <a href="https://github.com/pytorch/pytorch/blob/master/torch/nn/utils/spectral_norm.py">Pytorch implementation</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Setup:</p>
+<ul>
+<li>Batch size: 64</li>
+<li>Kernel of size :[16, 16, 256, 512]</li>
+<li>Steps: 1000</li>
+<li>One power iteration per step</li>
+<li>Hardware: NVIDIA V100</li>
+</ul>
+<p>Results are:</p>
+<ul>
+<li>Elapse time of Tensorflow SpectralNormalizationV2:  1.1081128120422363s</li>
+<li>Elapse time of Pytorch official SpectralNorm implementation:  1.0783729553222656s</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Pytorch seems to be a little bit faster. I am not entirely sure whether it has to do with implementations of spectral normalization or just to the differences between Pytorch and Tensorflow. Regardless, those extra 30ms every 1000 steps should not be a game changer.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Summary">Summary<a class="anchor-link" href="#Summary"> </a></h1><p>Spectral normalization is quite widely used in various implementations of GANs. One of the most famous applications is <a href="https://arxiv.org/abs/1809.11096">Biggan</a>. All images below are generated by BigGAN architecture that uses Spectral normalization. This should highlight the importance of this advancement.</p>
+<p>Throughout this post we focused on the implementation of power iteration proposed in <a href="https://arxiv.org/abs/1802.05957">Spectral Normalization for Generative Adversarial Networks paper</a>. We have compared various methods to calculate the largest singular value and observed that the proposed power iteration method is the fastest and after multiple iterations it achieves reasonable accuracy.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="https://miro.medium.com/max/2468/1*Yw2KxjmIkj8yqS-ykLCQCQ.png" alt="alt text" /></p>
+
+</div>
+</div>
+</div>
 </div>
 
 
