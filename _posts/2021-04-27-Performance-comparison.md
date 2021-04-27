@@ -1,3 +1,11 @@
+---
+toc: true
+layout: post
+description: Summary of performance analysis done of Meff algorithm.
+categories: [markdown]
+title: An Example Markdown Post
+---
+
 # Performance comparision
 
 
