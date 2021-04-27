@@ -4,17 +4,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Tags | Deep learning</title>
+<title>An Example Markdown Post | Deep learning</title>
 <meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Tags" />
+<meta property="og:title" content="An Example Markdown Post" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Blog posts about what interests me" />
-<meta property="og:description" content="Blog posts about what interests me" />
-<link rel="canonical" href="https://donatasrep.github.io/donatas.repecka/categories/" />
-<meta property="og:url" content="https://donatasrep.github.io/donatas.repecka/categories/" />
+<meta name="description" content="Summary of performance analysis done of Meff algorithm." />
+<meta property="og:description" content="Summary of performance analysis done of Meff algorithm." />
+<link rel="canonical" href="https://donatasrep.github.io/donatas.repecka/markdown/2021/04/27/Performance-comparison.html" />
+<meta property="og:url" content="https://donatasrep.github.io/donatas.repecka/markdown/2021/04/27/Performance-comparison.html" />
 <meta property="og:site_name" content="Deep learning" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-04-27T00:00:00-05:00" />
 <script type="application/ld+json">
-{"url":"https://donatasrep.github.io/donatas.repecka/categories/","@type":"WebPage","headline":"Tags","description":"Blog posts about what interests me","@context":"https://schema.org"}</script>
+{"url":"https://donatasrep.github.io/donatas.repecka/markdown/2021/04/27/Performance-comparison.html","@type":"BlogPosting","headline":"An Example Markdown Post","dateModified":"2021-04-27T00:00:00-05:00","datePublished":"2021-04-27T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://donatasrep.github.io/donatas.repecka/markdown/2021/04/27/Performance-comparison.html"},"description":"Summary of performance analysis done of Meff algorithm.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/donatas.repecka/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://donatasrep.github.io/donatas.repecka/feed.xml" title="Deep learning" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -97,36 +99,90 @@ window.onload = wrap_img;
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">An Example Markdown Post</h1><p class="page-description">Summary of performance analysis done of Meff algorithm.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-04-27T00:00:00-05:00" itemprop="datePublished">
+        Apr 27, 2021
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
 
-<h2>Contents</h2>
-
-  
-  
-  
-
-  <ul>
-  
-    <li><a href="#markdown">markdown</a></li>
-  
-  </ul>
-
-  
-      <h3 id ="markdown"><i class="fas fa-tags category-tags-icon"></i></i> markdown</h3>
-      <a name="markdown"></a>
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
       
-        <article class="archive-item">
-          <p class="post-meta post-meta-title"><a class="page-meta" href="/donatas.repecka/markdown/2021/04/27/Performance-comparison.html">An Example Markdown Post</a>  • Apr 27, 2021</p>
-        </article>
+        <a class="category-tags-link" href="/donatas.repecka/categories/#markdown">markdown</a>
         
       
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h1"><a href="#performance-comparision">Performance comparision</a>
+<ul>
+<li class="toc-entry toc-h2"><a href="#setup">Setup</a></li>
+<li class="toc-entry toc-h2"><a href="#baselines">Baselines</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#c-implementation">C++ implementation</a></li>
+<li class="toc-entry toc-h3"><a href="#c-implemnentation">C implemnentation</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#results">Results</a></li>
+</ul>
+</li>
+</ul><h1 id="performance-comparision">
+<a class="anchor" href="#performance-comparision" aria-hidden="true"><span class="octicon octicon-link"></span></a>Performance comparision</h1>
+
+<h2 id="setup">
+<a class="anchor" href="#setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup</h2>
+
+<p>The task used to evaluate the performance various languages and libraries is meff -  the number of effective sequences in the MSA. 
+The alogrithm is quite simple: the input is a list of equal length sequences, we need to calculate how many effectively unique seqeunces there are. 
+In order to do so, firstly we need to calcualate pairwise identities (what percentage of sequence is matching) and if the identity is higher than 
+chosen threshold, we cluster them together. As a result we get how many sequences are similar to the one of interest and this number determines the weight 
+of the sequences towards the final result.</p>
+
+<p>Pseudo code looks like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for seq1 in seqs:
+  for seq2 in seqs:
+    if count_mathes(seq1, seq2) &gt; threshold:
+      weight +=1
+  meff += 1/weight
   
+meff = meff/(len(seq1)^0.5)
+</code></pre></div></div>
+
+<p>While code codes not look complex, the complexity is O(n^2) which does not scale well (later we will see how to make it O(n log(n))). I will use the MSA which consists 
+of 10000 sequences of length 683.</p>
+
+<h2 id="baselines">
+<a class="anchor" href="#baselines" aria-hidden="true"><span class="octicon octicon-link"></span></a>Baselines</h2>
+
+<p>For baseline we will use C and C++ implementations</p>
+
+<h3 id="c-implementation">
+<a class="anchor" href="#c-implementation" aria-hidden="true"><span class="octicon octicon-link"></span></a>C++ implementation</h3>
+
+<p>C++ implementation was extracted from https://zhanglab.dcmb.med.umich.edu/DeepMSA/ package. No changes have been made to it.</p>
+
+<h3 id="c-implemnentation">
+<a class="anchor" href="#c-implemnentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>C implemnentation</h3>
+<p>C implementation wast taken from http://prody.csb.pitt.edu/_modules/prody/sequence/analysis.html#calcMeff. Once again the code was run as it is.</p>
+
+<h2 id="results">
+<a class="anchor" href="#results" aria-hidden="true"><span class="octicon octicon-link"></span></a>Results</h2>
 
 
-
-
-</div>
+  </div><a class="u-url" href="/donatas.repecka/markdown/2021/04/27/Performance-comparison.html" hidden></a>
+</article>
       </div>
     </main><footer class="site-footer h-card">
   <data class="u-url" href="/donatas.repecka/"></data>
