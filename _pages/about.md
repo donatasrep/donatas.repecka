@@ -4,8 +4,6 @@ title: About Me
 permalink: /about/
 ---
 
-This website is powered by **[fastpages](https://github.com/fastai/fastpages)** [^1].
+I am CTO co-founder of [Biomatter Designs](https://www.biomatterdesigns.com/). Currently working on developing deep learning based tools for various aspects of protein engineering.
 
-
-
-[^1]:a blogging platform that natively supports Jupyter notebooks in addition to other formats.
+[LinkedIn](https://www.linkedin.com/in/donatasrep/)
