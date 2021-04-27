@@ -37,10 +37,10 @@ For baseline we will use C and C++ implementations
 
 ### C++ implementation
 
-C++ implementation was extracted from https://zhanglab.dcmb.med.umich.edu/DeepMSA/ package. No changes have been made to it.
+C++ implementation was extracted from [https://zhanglab.dcmb.med.umich.edu/DeepMSA/] package. No changes have been made to it.
 
 ### C implemnentation
-C implementation wast taken from http://prody.csb.pitt.edu/_modules/prody/sequence/analysis.html#calcMeff. Once again the code was run as it is. 
+C implementation wast taken from [http://prody.csb.pitt.edu/_modules/prody/sequence/analysis.html#calcMeff]. Once again the code was run as it is. 
 
 ## Results
 
