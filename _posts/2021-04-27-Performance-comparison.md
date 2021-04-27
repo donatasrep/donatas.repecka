@@ -3,10 +3,10 @@ toc: true
 layout: post
 description: Summary of performance analysis done of Meff algorithm.
 categories: [markdown]
-title: An Example Markdown Post
+title: Performance comparison of Meff algorithm
 ---
 
-# Performance comparision
+# Performance comparison of Meff algorithm
 
 
 
