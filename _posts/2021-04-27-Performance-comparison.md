@@ -5,10 +5,7 @@ description: Summary of performance analysis done of Meff algorithm.
 categories: [markdown]
 title: Performance comparison of Meff algorithm
 ---
-
 # Performance comparison of Meff algorithm
-
-
 
 ## Setup
 
