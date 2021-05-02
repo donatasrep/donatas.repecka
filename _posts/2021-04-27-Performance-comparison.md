@@ -70,7 +70,7 @@ In this section I display the results I got on my hardware. The implementations 
 | Numba           | 1       | 00:26.63  |
 | Julia           | 1       | 04:51.00**|
 
-* Pure python times were estimated on the timings I got on 100 sequences.
+\* Pure python times were estimated on the timings I got on 100 sequences.
 
 ** I am quite sure that Julia can be faster and the developer is to blame for its poor performance.
 
@@ -103,7 +103,7 @@ Nowadays, if you really want to go fast, you use accelerators such as GPU and TP
 
 ## Conclusion
 
-During this experiment I have not found anything that would be unexpected apart from some minor things. The main takeaways are:  
+During this experiment I have not found anything that would be ground breaking or new. Nevertheless, I the findings are extremelly useful for myself. The main takeaways are:  
 
 * Pure python is slow.
 * Optimised python libraries can give you approximately C/C++ performance.
