@@ -2,7 +2,8 @@
 toc: true
 layout: post
 description: Summary of performance analysis done of the number of effective sequences algorithm.
-categories: [markdown]
+author: Donatas Repečka
+categories: [performance]
 title: Performance comparison of the number of effective sequences algorithm
 ---
 # Performance comparison of the number of effective sequences algorithm
