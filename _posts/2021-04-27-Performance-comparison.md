@@ -80,7 +80,7 @@ The very first thing, python is slow, very slow and if I would just compare Pyth
 
 While you could try to optimise the performance of the algorithm till perfection, in practise relative optimized code that scales will be way faster than optimal one on single thread. You can see that in the table below. 
 
-| Core            | Threads | Time     |
+| Code            | Threads | Time     |
 | --------------- | ------- | -------- |
 | Numpy           | 12      | 00:07.11 |
 | Numba           | 12      | 00:05.12 |
@@ -94,7 +94,7 @@ Some notes: C and C++ implementation did not have support multi threaded executi
 Nowadays, if you really want to go fast, you use accelerators such as GPU and TPU. While it requires to convert your code into the form that GPU likes (pretty much matrix multiplication), the gains sometimes are incredible. Even running on a mediocre GPU (Nvidia 1650GTX), I managed to have the best performance. What is more, Jax performance seems like out of the different world, but I will cover the details of the implementations separately. 
 
 
-| Core            | Threads | Time     |
+| Code            | Threads | Time     |
 | --------------- | ------- | -------- |
 | Tensorflow      | 1       | 00:06.10 |
 | Pytorch         | 1       | 00:08.05 |
