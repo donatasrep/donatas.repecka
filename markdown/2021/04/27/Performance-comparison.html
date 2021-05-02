@@ -241,12 +241,12 @@ meff = meff/(len(seq1)^0.5)
 
 <p>** I am quite sure that Julia can be faster and the developer is to blame for its poor performance.</p>
 
-<p>The very first thing, Python is slow, very slow and if I would just compare Python vs C/C++ that would be the end of the story. However, the main strength of Python is its ecosystem. There are a bunch of optimised libraries you can use (just to be clear, I have not tested all of them, only the ones I thought to be good to test) which improves performance drastically. In my case, numpy, Cython and numba implementations were faster than the C/C++, numba being the fastest one (I have opted to use Fastmath option which sacrifices precision for speed, more about this in the notebook. In general, it seems that any optimized library could achieve C/C++ like performance.</p>
+<p>The very first thing, Python is slow, very slow and if I would just compare Python vs C/C++ that would be the end of the story. However, the main strength of Python is its ecosystem. There are a lot of optimised libraries you can use (just to be clear, I have not tested all of them, only the ones I thought to be good to test) which improves performance drastically. In my case, Numpy, Cython and Numba implementations were faster than the C/C++, Numba being the fastest one (I have opted to use Fastmath option which sacrifices precision for speed, more about this in the notebook). In general, it seems that any optimized library could achieve C/C++ like performance.</p>
 
 <h3 id="multi-threaded">
 <a class="anchor" href="#multi-threaded" aria-hidden="true"><span class="octicon octicon-link"></span></a>Multi threaded</h3>
 
-<p>While you could try to optimise the performance of the algorithm till perfection, in practise relative optimized code that scales will be way faster than optimal one on single thread. You can see that in the table below.</p>
+<p>While you could try to optimize the performance of the algorithm till perfection, in practise relative optimized code that scales will be way faster than optimal one on single thread. You can see that in the table below.</p>
 
 <table>
   <thead>
@@ -280,12 +280,12 @@ meff = meff/(len(seq1)^0.5)
   </tbody>
 </table>
 
-<p>Some notes: C and C++ implementation did not have support multi threaded execution. Numpy version utilised the multiprocessing library to do multithreading, while numba has in-built support for that. I skipped Julia and Cypthon due to time constraints. I have also introduced Tensorflow and Pytorch as my work is around developing deep learning models and I try to compare those frameworks whenever I have a chance. While numba and numpy performance was as expected - much faster on multiple threads (just to note: there is some overhead due to multithreading, but it is still worth scaling up), the Tensorflow and Pytorch were both in comparison quite slow (I have to admit, not quite sure why).</p>
+<p>Some notes: C and C++ implementation did not have support multi threaded execution. Numpy version utilized the multiprocessing library to do multithreading, while numba has built-in support for that. I skipped Julia and Cython due to time constraints. I have also introduced Tensorflow and Pytorch as my work is around developing deep learning models and I try to compare those frameworks whenever I have a chance. While Numba and Numpy performance was as expected - much faster on multiple threads (just to note: there is some overhead due to multithreading, but it is still worth scaling up), Tensorflow and Pytorch were both quite slow in comparison (I have to admit, not quite sure why).</p>
 
 <h3 id="with-accelerator-gpu">
 <a class="anchor" href="#with-accelerator-gpu" aria-hidden="true"><span class="octicon octicon-link"></span></a>With accelerator (GPU)</h3>
 
-<p>Nowadays, if you really want to go fast, you use accelerators such as GPU and TPU. While it requires to convert your code into the form that GPU likes (pretty much matrix multiplication), the gains sometimes are incredible. Even running on a mediocre GPU (Nvidia 1650GTX), I managed to have the best performance. What is more, Jax performance seems like out of the different world, but I will cover the details of the implementations separately.</p>
+<p>Nowadays, if you really want to go fast, you use accelerators such as GPU and TPU. While it requires to convert your code into the form that GPU likes (pretty much matrix multiplication), the gains sometimes are incredible. Even running on a mediocre GPU (Nvidia 1650GTX), I managed to have the best performance. What is more, Jax performance seems like out of this world, but I will cover the details of the implementations separately.</p>
 
 <table>
   <thead>
@@ -322,7 +322,7 @@ meff = meff/(len(seq1)^0.5)
 <ul>
   <li>Pure Python is slow.</li>
   <li>Optimised Python libraries can give you approximately C/C++ performance.</li>
-  <li>Scaling to multi threads or using GPU will give you the best performance.</li>
+  <li>Scaling to multiple threads or using GPU will give you the best performance.</li>
   <li>Yet another thing which is not visible in the tables and is often overlooked is the solution itself. I have written some pieces several times to get these results (improving performance substantially).</li>
 </ul>
 
