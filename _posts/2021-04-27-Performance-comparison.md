@@ -62,13 +62,13 @@ In this section I display the results I got on my hardware. The implementations 
 
 | Code            | Threads | Time      |
 | --------------- | ------- | --------- |
-| C++             | 1       | 02:26.86  |
-| C               | 1       | 00:41.35  |
-| Pure Python     | 1       | ~7 hours* |
-| Numpy           | 1       | 00:32.51  |
-| Cython          | 1       | 00:32.43  |
-| Numba           | 1       | 00:26.63  |
-| Julia           | 1       | 04:51.00**|
+| [C++](https://zhanglab.dcmb.med.umich.edu/DeepMSA/) | 1       | 02:26.86  |
+| [C](http://prody.csb.pitt.edu/_modules/prody/sequence/analysis.html#calcMeff) | 1       | 00:41.35  |
+| [Pure Python](_notebooks/2020-04-05-gan-wgan.ipynb)   | 1       | ~7 hours* |
+| [Numpy]()           | 1       | 00:32.51  |
+| [Numba]()           | 1       | 00:26.63  |
+| [Cython]()          | 1       | 00:32.43  |
+| [Julia]()           | 1       | 04:51.00**|
 
 \* Pure Python times were estimated on the timings I got on 100 sequences.
 
@@ -82,10 +82,10 @@ While you could try to optimize the performance of the algorithm till perfection
 
 | Code            | Threads | Time     |
 | --------------- | ------- | -------- |
-| Numpy           | 12      | 00:07.11 |
-| Numba           | 12      | 00:05.12 |
-| Tensroflow      | 12      | 00:39.88 |
-| Pytorch         | 12      | 00:39.14 |
+| [Numpy]()       | 12      | 00:07.11 |
+| [Numba]()       | 12      | 00:05.12 |
+| [Tensroflow]()  | 12      | 00:39.88 |
+| [Pytorch]()     | 12      | 00:39.14 |
 
 Some notes: C and C++ implementation did not have support multi threaded execution. Numpy version utilized the multiprocessing library to do multithreading, while numba has built-in support for that. I skipped Julia and Cython due to time constraints. I have also introduced Tensorflow and Pytorch as my work is around developing deep learning models and I try to compare those frameworks whenever I have a chance. While Numba and Numpy performance was as expected - much faster on multiple threads (just to note: there is some overhead due to multithreading, but it is still worth scaling up), Tensorflow and Pytorch were both quite slow in comparison (I have to admit, not quite sure why). 
 
@@ -96,9 +96,9 @@ Nowadays, if you really want to go fast, you use accelerators such as GPU and TP
 
 | Code            | Threads | Time     |
 | --------------- | ------- | -------- |
-| Tensorflow      | 1       | 00:06.10 |
-| Pytorch         | 1       | 00:08.05 |
-| JAX             | 1       | 00:00.13 |
+| [Tensorflow]()  | 1       | 00:06.10 |
+| [Pytorch]()     | 1       | 00:08.05 |
+| [JAX]()         | 1       | 00:00.13 |
 
 
 ## Conclusion
