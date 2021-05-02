@@ -13,7 +13,7 @@ From time to time I hear something along the lines 'we should rewrite this in C 
 written in different ways including C and C++. The main questions I was intrigued about were:
 * How much faster is C/C++ in practise if I were to rewrite code?
 * Does the gain justify the effort?
-* Are any of the python performance libraries like Cypthon or Numba useful in practise?
+* Are any of the Python performance libraries like Cython or Numba useful in practise?
 
 Note: a one example is not enough to draw any solid conclusions, but when it resonates with what you heard before that is at least reassuring. 
 
@@ -66,15 +66,15 @@ In this section I display the results I got on my hardware. The implementations 
 | C               | 1       | 00:41.35  |
 | Pure Python     | 1       | ~7 hours* |
 | Numpy           | 1       | 00:32.51  |
-| Cypthon         | 1       | 00:32.43  |
+| Cython          | 1       | 00:32.43  |
 | Numba           | 1       | 00:26.63  |
 | Julia           | 1       | 04:51.00**|
 
-\* Pure python times were estimated on the timings I got on 100 sequences.
+\* Pure Python times were estimated on the timings I got on 100 sequences.
 
 ** I am quite sure that Julia can be faster and the developer is to blame for its poor performance.
 
-The very first thing, python is slow, very slow and if I would just compare Python vs C/C++ that would be the end of the story. However, the main strength of Python is its ecosystem. There are a bunch of optimised libraries you can use (just to be clear, I have not tested all of them, only the ones I thought to be good to test) which improves performance drastically. In my case, numpy, Cpython and numba implementations were faster than the C/C++, numba being the fastest one (I have opted to use Fastmath option which sacrifices precision for speed, more about this in the notebook. In general, it seems that any optimized library could achieve C/C++ like performance.
+The very first thing, Python is slow, very slow and if I would just compare Python vs C/C++ that would be the end of the story. However, the main strength of Python is its ecosystem. There are a bunch of optimised libraries you can use (just to be clear, I have not tested all of them, only the ones I thought to be good to test) which improves performance drastically. In my case, numpy, Cython and numba implementations were faster than the C/C++, numba being the fastest one (I have opted to use Fastmath option which sacrifices precision for speed, more about this in the notebook. In general, it seems that any optimized library could achieve C/C++ like performance.
 
 ### Multi threaded 
 
@@ -105,10 +105,10 @@ Nowadays, if you really want to go fast, you use accelerators such as GPU and TP
 
 During this experiment I have not found anything that would be ground breaking or new. Nevertheless, I the findings are extremelly useful for myself. The main takeaways are:  
 
-* Pure python is slow.
-* Optimised python libraries can give you approximately C/C++ performance.
+* Pure Python is slow.
+* Optimised Python libraries can give you approximately C/C++ performance.
 * Scaling to multi threads or using GPU will give you the best performance. 
 * Yet another thing which is not visible in the tables and is often overlooked is the solution itself. I have written some pieces several times to get these results (improving performance substantially). 
 
-And if you were to ask me whether it is worth going to C/C++ for the performance reasons, I would say: unless you really need to squeeze every split of the second, you can stay in python and be at least competitive with C/C++ performance, not to mention development/maintenance side of things. 
+And if you were to ask me whether it is worth going to C/C++ for the performance reasons, I would say: unless you really need to squeeze every split of the second, you can stay in Python and be at least competitive with C/C++ performance, not to mention development/maintenance side of things. 
 
