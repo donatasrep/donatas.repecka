@@ -51,8 +51,8 @@ Note: the results might vary wildly depending of the hardware you have. It is go
 
 For baseline I used C and C++ implementations. As I do not consider myself an expert in C or C++ I borrowed existing implementations from existing sources:
 
-* C++ implementation was extracted from (DeepMSA)[https://zhanglab.dcmb.med.umich.edu/DeepMSA/] package. No changes have been made to it.
-* C implementation wast taken from (Prody)[http://prody.csb.pitt.edu/_modules/prody/sequence/analysis.html#calcMeff]. Once again the code was run as it is. 
+* C++ implementation was extracted from [DeepMSA](https://zhanglab.dcmb.med.umich.edu/DeepMSA/) package. No changes have been made to it.
+* C implementation wast taken from [Prody](http://prody.csb.pitt.edu/_modules/prody/sequence/analysis.html#calcMeff). Once again the code was run as it is. 
 
 ## Results
 
