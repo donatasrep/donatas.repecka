@@ -64,17 +64,21 @@ In this section I display the results I got on my hardware. The implementations 
 | --------------- | ------- | --------- |
 | C++             | 1       | 02:26.86  |
 | C               | 1       | 00:41.35  |
-| Pure Python     | 1       | ~7 hours[^1] |
+| Pure Python     | 1       | ~7 hours* |
 | Numpy           | 1       | 00:32.51  |
 | Cypthon         | 1       | 00:32.43  |
 | Numba           | 1       | 00:26.63  |
 | Julia           | 1       | 04:51.00**|
 
-[^1] Pure python times were estimated on the timings I got on 100 sequences. 
-** I am quite sure that Julia can be faster and the developer it to blame for its poor performance. 
+* Pure python times were estimated on the timings I got on 100 sequences.
 
+** I am quite sure that Julia can be faster and the developer is to blame for its poor performance.
+
+The very first thing, python is slow, very slow and if I would just compare Python vs C/C++ that would be the end of the story. However, the main strength of Python is its ecosystem. There are a bunch of optimised libraries you can use (just to be clear, I have not tested all of them, only the ones I thought to be good to test) which improves performance drastically. In my case, numpy, Cpython and numba implementations were faster than the C/C++, numba being the fastest one (I have opted to use Fastmath option which sacrifices precision for speed, more about this in the notebook. In general, it seems that any optimized library could achieve C/C++ like performance.
 
 ### Multi threaded 
+
+While you could try to optimise the performance of the algorithm till perfection, in practise relative optimized code that scales will be way faster than optimal one on single thread. You can see that in the table below. 
 
 | Core            | Threads | Time     |
 | --------------- | ------- | -------- |
@@ -83,11 +87,28 @@ In this section I display the results I got on my hardware. The implementations 
 | Tensroflow      | 12      | 00:39.88 |
 | Pytorch         | 12      | 00:39.14 |
 
+Some notes: C and C++ implementation did not have support multi threaded execution. Numpy version utilised the multiprocessing library to do multithreading, while numba has in-built support for that. I skipped Julia and Cypthon due to time constraints. I have also introduced Tensorflow and Pytorch as my work is around developing deep learning models and I try to compare those frameworks whenever I have a chance. While numba and numpy performance was as expected - much faster on multiple threads (just to note: there is some overhead due to multithreading, but it is still worth scaling up), the Tensorflow and Pytorch were both in comparison quite slow (I have to admit, not quite sure why). 
+
 ### With accelerator (GPU)
+
+Nowadays, if you really want to go fast, you use accelerators such as GPU and TPU. While it requires to convert your code into the form that GPU likes (pretty much matrix multiplication), the gains sometimes are incredible. Even running on a mediocre GPU (Nvidia 1650GTX), I managed to have the best performance. What is more, Jax performance seems like out of the different world, but I will cover the details of the implementations separately. 
+
 
 | Core            | Threads | Time     |
 | --------------- | ------- | -------- |
 | Tensorflow      | 1       | 00:06.10 |
 | Pytorch         | 1       | 00:08.05 |
 | JAX             | 1       | 00:00.13 |
+
+
+## Conclusion
+
+During this experiment I have not found anything that would be unexpected apart from some minor things. The main takeaways are:  
+
+* Pure python is slow.
+* Optimised python libraries can give you approximately C/C++ performance.
+* Scaling to multi threads or using GPU will give you the best performance. 
+* Yet another thing which is not visible in the tables and is often overlooked is the solution itself. I have written some pieces several times to get these results (improving performance substantially). 
+
+And if you were to ask me whether it is worth going to C/C++ for the performance reasons, I would say: unless you really need to squeeze every split of the second, you can stay in python and be at least competitive with C/C++ performance, not to mention development/maintenance side of things. 
 
