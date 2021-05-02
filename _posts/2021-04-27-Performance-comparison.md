@@ -74,11 +74,11 @@ In this section I display the results I got on my hardware. The implementations 
 
 ** I am quite sure that Julia can be faster and the developer is to blame for its poor performance.
 
-The very first thing, Python is slow, very slow and if I would just compare Python vs C/C++ that would be the end of the story. However, the main strength of Python is its ecosystem. There are a bunch of optimised libraries you can use (just to be clear, I have not tested all of them, only the ones I thought to be good to test) which improves performance drastically. In my case, numpy, Cython and numba implementations were faster than the C/C++, numba being the fastest one (I have opted to use Fastmath option which sacrifices precision for speed, more about this in the notebook. In general, it seems that any optimized library could achieve C/C++ like performance.
+The very first thing, Python is slow, very slow and if I would just compare Python vs C/C++ that would be the end of the story. However, the main strength of Python is its ecosystem. There are a lot of optimised libraries you can use (just to be clear, I have not tested all of them, only the ones I thought to be good to test) which improves performance drastically. In my case, Numpy, Cython and Numba implementations were faster than the C/C++, Numba being the fastest one (I have opted to use Fastmath option which sacrifices precision for speed, more about this in the notebook). In general, it seems that any optimized library could achieve C/C++ like performance.
 
 ### Multi threaded 
 
-While you could try to optimise the performance of the algorithm till perfection, in practise relative optimized code that scales will be way faster than optimal one on single thread. You can see that in the table below. 
+While you could try to optimize the performance of the algorithm till perfection, in practise relative optimized code that scales will be way faster than optimal one on single thread. You can see that in the table below. 
 
 | Code            | Threads | Time     |
 | --------------- | ------- | -------- |
@@ -87,11 +87,11 @@ While you could try to optimise the performance of the algorithm till perfection
 | Tensroflow      | 12      | 00:39.88 |
 | Pytorch         | 12      | 00:39.14 |
 
-Some notes: C and C++ implementation did not have support multi threaded execution. Numpy version utilised the multiprocessing library to do multithreading, while numba has in-built support for that. I skipped Julia and Cypthon due to time constraints. I have also introduced Tensorflow and Pytorch as my work is around developing deep learning models and I try to compare those frameworks whenever I have a chance. While numba and numpy performance was as expected - much faster on multiple threads (just to note: there is some overhead due to multithreading, but it is still worth scaling up), the Tensorflow and Pytorch were both in comparison quite slow (I have to admit, not quite sure why). 
+Some notes: C and C++ implementation did not have support multi threaded execution. Numpy version utilized the multiprocessing library to do multithreading, while numba has built-in support for that. I skipped Julia and Cython due to time constraints. I have also introduced Tensorflow and Pytorch as my work is around developing deep learning models and I try to compare those frameworks whenever I have a chance. While Numba and Numpy performance was as expected - much faster on multiple threads (just to note: there is some overhead due to multithreading, but it is still worth scaling up), Tensorflow and Pytorch were both quite slow in comparison (I have to admit, not quite sure why). 
 
 ### With accelerator (GPU)
 
-Nowadays, if you really want to go fast, you use accelerators such as GPU and TPU. While it requires to convert your code into the form that GPU likes (pretty much matrix multiplication), the gains sometimes are incredible. Even running on a mediocre GPU (Nvidia 1650GTX), I managed to have the best performance. What is more, Jax performance seems like out of the different world, but I will cover the details of the implementations separately. 
+Nowadays, if you really want to go fast, you use accelerators such as GPU and TPU. While it requires to convert your code into the form that GPU likes (pretty much matrix multiplication), the gains sometimes are incredible. Even running on a mediocre GPU (Nvidia 1650GTX), I managed to have the best performance. What is more, Jax performance seems like out of this world, but I will cover the details of the implementations separately. 
 
 
 | Code            | Threads | Time     |
@@ -107,7 +107,7 @@ During this experiment I have not found anything that would be ground breaking o
 
 * Pure Python is slow.
 * Optimised Python libraries can give you approximately C/C++ performance.
-* Scaling to multi threads or using GPU will give you the best performance. 
+* Scaling to multiple threads or using GPU will give you the best performance. 
 * Yet another thing which is not visible in the tables and is often overlooked is the solution itself. I have written some pieces several times to get these results (improving performance substantially). 
 
 And if you were to ask me whether it is worth going to C/C++ for the performance reasons, I would say: unless you really need to squeeze every split of the second, you can stay in Python and be at least competitive with C/C++ performance, not to mention development/maintenance side of things. 
