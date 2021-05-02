@@ -64,13 +64,13 @@ In this section I display the results I got on my hardware. The implementations 
 | --------------- | ------- | --------- |
 | C++             | 1       | 02:26.86  |
 | C               | 1       | 00:41.35  |
-| Pure Python     | 1       | ~7 hours* |
+| Pure Python     | 1       | ~7 hours[^1] |
 | Numpy           | 1       | 00:32.51  |
 | Cypthon         | 1       | 00:32.43  |
 | Numba           | 1       | 00:26.63  |
 | Julia           | 1       | 04:51.00**|
 
-* Pure python times were estimated on the timings I got on 100 sequences. 
+[^1] Pure python times were estimated on the timings I got on 100 sequences. 
 ** I am quite sure that Julia can be faster and the developer it to blame for its poor performance. 
 
 
