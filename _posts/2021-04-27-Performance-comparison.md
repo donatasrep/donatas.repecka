@@ -39,7 +39,7 @@ for seq1 in seqs:
 meff = meff/(len(seq1)^0.5)
 ```
 
-Code complexity is O(n^2) which means it does not scale well (later we will see how to make it O(n log(n))). 
+Code complexity is `O((n^2)*l)` complexity (where `l` is length in the sequence) which means it does not scale well. Nevertheless there are ways to make it faster.  
 
 ## Setup
 
