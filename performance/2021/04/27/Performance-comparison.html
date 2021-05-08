@@ -166,7 +166,7 @@ chosen threshold, we cluster them together. The inverse of cluster size gives yo
 meff = meff/(len(seq1)^0.5)
 </code></pre></div></div>
 
-<p>Code complexity is O(n^2) which means it does not scale well (later we will see how to make it O(n log(n))).</p>
+<p>Code complexity is <code class="language-plaintext highlighter-rouge">O((n^2)*l)</code> complexity (where <code class="language-plaintext highlighter-rouge">l</code> is length in the sequence) which means it does not scale well. Nevertheless there are ways to make it faster.</p>
 
 <h2 id="setup">
 <a class="anchor" href="#setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup</h2>
