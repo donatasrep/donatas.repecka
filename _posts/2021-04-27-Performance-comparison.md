@@ -65,9 +65,9 @@ In this section I display the results I got on my hardware. The implementations 
 | --------------- | ------- | --------- |
 | [C++](https://zhanglab.dcmb.med.umich.edu/DeepMSA/) | 1       | 02:26.86  |
 | [C](http://prody.csb.pitt.edu/_modules/prody/sequence/analysis.html#calcMeff) | 1       | 00:41.35  |
-| [Pure Python](_notebooks/2020-04-05-gan-wgan.ipynb)   | 1       | ~7 hours* |
-| [Numpy]()           | 1       | 00:32.51  |
-| [Numba]()           | 1       | 00:26.63  |
+| [Pure Python](_notebooks/2021-05-08-performance-pure-python.ipynb)   | 1       | ~7 hours* |
+| [Numpy](_notebooks/2021-05-08-performance-numpy.ipynb)           | 1       | 00:32.51  |
+| [Numba](_notebooks/2021-05-08-performance-numba.ipynb)           | 1       | 00:26.63  |
 | [Cython]()          | 1       | 00:32.43  |
 | [Julia]()           | 1       | 04:51.00**|
 
