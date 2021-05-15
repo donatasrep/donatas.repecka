@@ -473,19 +473,6 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 </div>
     
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Couple points:</p>
-<ul>
-<li>float16 - gives improvement on GPU, but precision suffers. If CPU is used, float16 is slower than float32.</li>
-<li>You cannot easily manipulate values in the Tensor. As a result, I could not use symmetry to reduce the amount of computations needed.</li>
-<li>tf.function can give a massive speed boost. </li>
-</ul>
-
-</div>
-</div>
-</div>
 </div>
 
 
