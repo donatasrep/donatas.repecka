@@ -96,7 +96,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      1 min read
+      2 min read
     
 </span></p>
 
@@ -159,7 +159,15 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In <a href="https://donatasrep.github.io/donatas.repecka/performance/2021/04/27/Performance-comparison.html">the previous post</a> I have compared various languages and libraries in terms of their speed. This notebook contains the code used in the comparison as well as some details about the choices made to improve the performance of numpy implementation.</p>
+<p>In <a href="https://donatasrep.github.io/donatas.repecka/performance/2021/04/27/Performance-comparison.html">the previous post</a> I have compared various languages and libraries in terms of their speed. This notebook contains the code used in the comparison as well as some details about the choices made to improve the performance of numba implementation.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>From Numba <a href="http://numba.pydata.org/">website</a>: "Numba translates Python functions to optimized machine code at runtime using the industry-standard LLVM compiler library. Numba-compiled numerical algorithms in Python can approach the speeds of C or FORTRAN."</p>
 
 </div>
 </div>
@@ -205,27 +213,6 @@ window.onload = wrap_img;
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Collecting numba
-  Downloading numba-0.53.1-cp39-cp39-win_amd64.whl (2.3 MB)
-Requirement already satisfied: setuptools in c:\users\donat\miniconda3\lib\site-packages (from numba) (51.0.0.post20201207)
-Requirement already satisfied: numpy&gt;=1.15 in c:\users\donat\miniconda3\lib\site-packages (from numba) (1.20.2)
-Collecting llvmlite&lt;0.37,&gt;=0.36.0rc1
-  Downloading llvmlite-0.36.0-cp39-cp39-win_amd64.whl (16.0 MB)
-Installing collected packages: llvmlite, numba
-Successfully installed llvmlite-0.36.0 numba-0.53.1
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     
 
@@ -235,14 +222,6 @@ Successfully installed llvmlite-0.36.0 numba-0.53.1
 <h2 id="Getting-data">
 <a class="anchor" href="#Getting-data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting data<a class="anchor-link" href="#Getting-data"> </a>
 </h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>I will cheat here and use pandas to help me to read the file.</p>
-
 </div>
 </div>
 </div>
@@ -315,6 +294,14 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As with Numpy and Python versions, we use the same input data. The code is closer to the version of pure Python because wrapping optimised Numpy code turned out to be slower. It seems that you are  better off leaving all optimisation for Numba.</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -323,7 +310,7 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span><span class="p">,</span> <span class="n">njit</span><span class="p">,</span> <span class="n">prange</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span><span class="p">,</span> <span class="n">prange</span>
 </pre></div>
 
     </div>
@@ -362,6 +349,14 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There are a couple of things that need to be done in order to utilise Numba fully. Firstly,  Numba uses JIT -(just in time compilation)[<a href="https://en.wikipedia.org/wiki/Just-in-time_compilation">https://en.wikipedia.org/wiki/Just-in-time_compilation</a>]. Hence you need to wrap your functions with either <code>@jit</code> or ‘jit’ function. Note, the first run of the wrapped function will be slower as Numba needs to compile code. Secondly, there is the <code>nopython</code> option that bypasses the Python interpreter. It has its own down sides that allows code to run faster.</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -370,7 +365,7 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fn</span> <span class="o">=</span> <span class="n">jit</span><span class="p">(</span><span class="n">get_nf_numba</span><span class="p">,</span> <span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">fn</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">fn</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -385,7 +380,7 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0.0765278731793381</pre>
+<pre>0.18006706787628668</pre>
 </div>
 
 </div>
@@ -417,7 +412,7 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>11.1 ms ± 75.5 µs per loop (mean ± std. dev. of 3 runs, 3 loops each)
+<pre>11 ms ± 642 µs per loop (mean ± std. dev. of 3 runs, 3 loops each)
 </pre>
 </div>
 </div>
@@ -428,6 +423,14 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Another really nice feature of Numba is that it allows to parallelise code with one single option as you can see below.</p>
+
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -436,7 +439,7 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fn</span> <span class="o">=</span> <span class="n">jit</span><span class="p">(</span><span class="n">get_nf_numba</span><span class="p">,</span> <span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fn</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">fn</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -451,7 +454,7 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0.0765278731793381</pre>
+<pre>0.18006706787628668</pre>
 </div>
 
 </div>
@@ -483,7 +486,7 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>4.9 ms ± 856 µs per loop (mean ± std. dev. of 3 runs, 3 loops each)
+<pre>6.11 ms ± 3.13 ms per loop (mean ± std. dev. of 3 runs, 3 loops each)
 </pre>
 </div>
 </div>
@@ -494,71 +497,15 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 </div>
     
 
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
+<div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fn</span> <span class="o">=</span> <span class="n">jit</span><span class="p">(</span><span class="n">get_nf_numba</span><span class="p">,</span> <span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>0.0765278731793381</pre>
-</div>
-
-</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Finally, if precision is less important and can be sacrificed for extra speed, there is <code>fastmath</code>option. From (Numba documentation)[<a href="https://numba.readthedocs.io/en/stable/user/performance-tips.html?highlight=fastmath#fastmath">https://numba.readthedocs.io/en/stable/user/performance-tips.html?highlight=fastmath#fastmath</a>]:</p>
+<p>“In certain classes of applications strict IEEE 754 compliance is less important. As a result it is possible to relax some numerical rigour with view of gaining additional performance. The way to achieve this behaviour in Numba is through the use of the fastmath keyword argument”</p>
 
 </div>
 </div>
-
 </div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>it -n 3 -r 3
-<span class="n">fn</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>10.6 ms ± 39 µs per loop (mean ± std. dev. of 3 runs, 3 loops each)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    
-
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -567,7 +514,7 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fn</span> <span class="o">=</span> <span class="n">jit</span><span class="p">(</span><span class="n">get_nf_numba</span><span class="p">,</span> <span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fn</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">fn</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span>
 </pre></div>
 
     </div>
@@ -582,7 +529,7 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0.0765278731793381</pre>
+<pre>0.18006706787628665</pre>
 </div>
 
 </div>
@@ -614,7 +561,8 @@ meff = meff/(len(seq1)^0.5)</code></pre>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>4.09 ms ± 2.14 ms per loop (mean ± std. dev. of 3 runs, 3 loops each)
+<pre>The slowest run took 6.90 times longer than the fastest. This could mean that an intermediate result is being cached.
+4.31 ms ± 3.63 ms per loop (mean ± std. dev. of 3 runs, 3 loops each)
 </pre>
 </div>
 </div>
