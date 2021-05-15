@@ -68,8 +68,8 @@ In this section I display the results I got on my hardware. The implementations 
 | [Pure Python](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-pure-python.html)   | 1       | ~7 hours* |
 | [Numpy](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-numpy.html)           | 1       | 00:32.51  |
 | [Numba](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-numba.html)           | 1       | 00:26.63  |
-| [Cython]()          | 1       | 00:32.43  |
-| [Julia]()           | 1       | 04:51.00**|
+| [Cython](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-cython.html)          | 1       | 00:32.43  |
+| [Julia](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-julia.html)           | 1       | 04:51.00**|
 
 \* Pure Python times were estimated on the timings I got on 100 sequences.
 
@@ -83,10 +83,10 @@ While you could try to optimize the performance of the algorithm till perfection
 
 | Code            | Threads | Time     |
 | --------------- | ------- | -------- |
-| [Numpy]()       | 12      | 00:07.11 |
-| [Numba]()       | 12      | 00:05.12 |
-| [Tensroflow]()  | 12      | 00:39.88 |
-| [Pytorch]()     | 12      | 00:39.14 |
+| [Numpy](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-numpy.html)  | 12      | 00:07.11 |
+| [Numba](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-numba.html)  | 12      | 00:05.12 |
+| [Tensroflow](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-tensorflow.html) | 12      | 00:39.88 |
+| [Pytorch](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-pytorch.html) | 12      | 00:39.14 |
 
 Some notes: C and C++ implementation did not have support multi threaded execution. Numpy version utilized the multiprocessing library to do multithreading, while numba has built-in support for that. I skipped Julia and Cython due to time constraints. I have also introduced Tensorflow and Pytorch as my work is around developing deep learning models and I try to compare those frameworks whenever I have a chance. While Numba and Numpy performance was as expected - much faster on multiple threads (just to note: there is some overhead due to multithreading, but it is still worth scaling up), Tensorflow and Pytorch were both quite slow in comparison (I have to admit, not quite sure why). 
 
@@ -97,9 +97,9 @@ Nowadays, if you really want to go fast, you use accelerators such as GPU and TP
 
 | Code            | Threads | Time     |
 | --------------- | ------- | -------- |
-| [Tensorflow]()  | 1       | 00:06.10 |
-| [Pytorch]()     | 1       | 00:08.05 |
-| [JAX]()         | 1       | 00:00.13 |
+| [Tensroflow](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-tensorflow.html) | 1       | 00:06.10 |
+| [Pytorch](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-pytorch.html) | 1       | 00:08.05 |
+| [JAX](https://donatasrep.github.io/donatas.repecka/performance/2021/05/08/performance-jax.html) | 1       | 00:00.13 |
 
 
 ## Conclusion
