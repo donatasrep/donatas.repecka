@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Performance Analysis - CUDA | Deep learning</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Performance Analysis - CUDA" />
+<meta name="author" content="Donatas Repečka" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Number of effective sequences implemented in CUDA" />
+<meta property="og:description" content="Number of effective sequences implemented in CUDA" />
+<link rel="canonical" href="https://donatasrep.github.io/donatas.repecka/performance/2024/03/23/performance-cuda.html" />
+<meta property="og:url" content="https://donatasrep.github.io/donatas.repecka/performance/2024/03/23/performance-cuda.html" />
+<meta property="og:site_name" content="Deep learning" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-03-23T00:00:00-05:00" />
+<script type="application/ld+json">
+{"url":"https://donatasrep.github.io/donatas.repecka/performance/2024/03/23/performance-cuda.html","@type":"BlogPosting","headline":"Performance Analysis - CUDA","dateModified":"2024-03-23T00:00:00-05:00","datePublished":"2024-03-23T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://donatasrep.github.io/donatas.repecka/performance/2024/03/23/performance-cuda.html"},"author":{"@type":"Person","name":"Donatas Repečka"},"description":"Number of effective sequences implemented in CUDA","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/donatas.repecka/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://donatasrep.github.io/donatas.repecka/feed.xml" title="Deep learning" /><link rel="shortcut icon" type="image/x-icon" href="/donatas.repecka/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/donatas.repecka/">Deep learning</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/donatas.repecka/about/">About Me</a><a class="page-link" href="/donatas.repecka/search/">Search</a><a class="page-link" href="/donatas.repecka/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Performance Analysis - CUDA</h1><p class="page-description">Number of effective sequences implemented in CUDA</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2024-03-23T00:00:00-05:00" itemprop="datePublished">
+        Mar 23, 2024
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Donatas Repečka</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      6 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/donatas.repecka/categories/#performance">performance</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/donatasrep/donatas.repecka/tree/master/_notebooks/2024-03-23-performance-cuda.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/donatas.repecka/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/donatasrep/donatas.repecka/master?filepath=_notebooks%2F2024-03-23-performance-cuda.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/donatas.repecka/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/donatasrep/donatas.repecka/blob/master/_notebooks/2024-03-23-performance-cuda.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/donatas.repecka/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#Introduction">Introduction </a></li>
+<li class="toc-entry toc-h2"><a href="#Setup">Setup </a></li>
+<li class="toc-entry toc-h2"><a href="#Getting-data">Getting data </a></li>
+<li class="toc-entry toc-h2"><a href="#Python">Python </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Testing">Testing </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#CUDA">CUDA </a></li>
+<li class="toc-entry toc-h2"><a href="#Numba-with-CUDA">Numba with CUDA </a></li>
+<li class="toc-entry toc-h2"><a href="#Summary">Summary </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2024-03-23-performance-cuda.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Introduction">
+<a class="anchor" href="#Introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction<a class="anchor-link" href="#Introduction"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In <a href="https://donatasrep.github.io/donatas.repecka/performance/2021/04/27/Performance-comparison.html">the previous post</a> I have compared various languages and libraries in terms of their speed. This notebook contains a version of CUDA that has CUDA kernels to perform the calculations.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As a test case, we will use calculation of effective sequences (Nf) in the MSA. Just to remind the pseudo code looks like this:</p>
+
+<pre><code>for seq1 in seqs:
+  for seq2 in seqs:
+    if count_mathes(seq1, seq2) &gt; threshold:
+      weight +=1
+  meff += 1/weight
+
+meff = meff/(len(seq1)^0.5)</code></pre>
+<p>Just note, that algorithmic complexity is <code>O(n*log(n))</code> or <code>O(n^2)</code> depending on implementation.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A reminder of speeds for 2500 sequences of MSA length 683.</p>
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>Time (ms)</th>
+<th>Time (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Numpy</td>
+<td>Singlethreaded</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>Multithreaded</td>
+<td>669</td>
+</tr>
+<tr>
+<td>Numpy</td>
+<td>Multithreaded</td>
+<td>503</td>
+</tr>
+<tr>
+<td>Pytorch</td>
+<td>GPU</td>
+<td>389</td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>Multithreaded + Low precision</td>
+<td>176</td>
+</tr>
+<tr>
+<td>Jax</td>
+<td>GPU</td>
+<td>116</td>
+</tr>
+</tbody>
+</table>
+<p>* <a href="https://github.com/google/jax/discussions/11078">Why is JAX so fast?</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Import  to note that a lot of of ideas were taken from Heremy Howard's lectures:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=nOxKexn3iBo">https://www.youtube.com/watch?v=nOxKexn3iBo</a></li>
+<li><a href="https://www.youtube.com/watch?v=eUuGdh3nBGo">https://www.youtube.com/watch?v=eUuGdh3nBGo</a></li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Setup">
+<a class="anchor" href="#Setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup<a class="anchor-link" href="#Setup"> </a>
+</h2>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># ! pip install pandas</span>
+<span class="c1"># ! pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121</span>
+<span class="c1"># ! pip install  wurlitzer ninja</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Getting-data">
+<a class="anchor" href="#Getting-data" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting data<a class="anchor-link" href="#Getting-data"> </a>
+</h2>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">fasta_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">lineterminator</span><span class="o">=</span><span class="s2">"&gt;"</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">fasta_df</span><span class="p">[[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'seq'</span><span class="p">]]</span> <span class="o">=</span> <span class="n">fasta_df</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">fasta_df</span><span class="o">.</span><span class="n">seq</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+<span class="n">seqs</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">(</span><span class="s1">'picked_msa.fasta'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">seqs</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array(['QRVAMDMHLRHMQYKMPDNYRGYQWRYDFPTIWIMQGGEGRINLTIPRAAPRKIQYQPNYAKTSPEYTMILRGAKPHATLRRDTGARNPCTYPWVQPRRPNKKPGQVDSLPNTDRLMNVKLNMDAHPQNPVPSVRRYGRPPYHTWSQNRDRKDIFFCRLRHPQYTPRFIFMWLDPMEGAYGTRQWQLRPTGFKVYPQRFDMIRHLDRIDFLATHPDRARRTSNDDRRRIIQYMRDCTTGQLIRRTQRGVRGSLIYIKKITACTKTNKSRGSRRKMGTLWRQMILKMQNEGTPQPKQPLTRLMFRGQIGFCLRWAPGFIMEIIPRSPRQKQGQRFVWGPDTTKISTMAKTIRRQIPIRGRPDRQKPFMRFNDMKTGSIKGNRQTKRGPWLLPNISRYKKRDPNIIGWPPCRLENIIAINRQKDIGKRQEGTPRNARIPHINMIRNKTPPDLWRYVILEQHSTIRRRDQDLNTFGPNNIRVPIQRRPRPMMGRTHVCRDARIMIHGQLPDRQDTPRPDIDHQWSQDGYYRRTMGTLKIGIINQQMQMNAWIKIRPIGQYITLIMRAIRQTIRKEIMGKKRVNSQDYLSIFIQIHAHGMASLLLGRRQYMGKMAKVKDMARIRRKIRFRPKLRYAAHCPGHTKGHYIMILGVLEIDTIILKIIAQMQPDQYQRRAMVYYPVYLRAV',
+       'QRVRMDMSLRSMQYIMPMIYPGYQWRYDFPTIWIMQGGEGRINLTIPRAAPRKIQYQPNYAKTSPEYTMILRGAKPHATLRRDTGARNPCTYPWVQPRRPNKKPGQVDSLPNTDRLMNVKLNMDAHPQNPVPSVRRYGRPPYHLWSQNRDRKDIFFCRLRHPQYTPRFIFMWLDPGEGAYGTRQWQLRPTGFKVYPQRFDMIRHLDRIDFLATHPDRARRTSNDDARRIIQYMRDCTTGQLIRRRQRGVRGSLIYIKKITRCTKTNKSRGSRRKMGTLWRQMILKMQNEGTPQPKQPLTRLMFRGQIGFCLRWAPGFIMEIIPRSPRQKQGQRFVWGPDTTKISTMAKTIRRQIPIRGRPDRQKPFMRFNDMKTGSIKGNRQTKRGPWLLPNISRYKKRDPNIIGWPPCRLENIIAINRQKDIGKRQEGTPRNARIPHINMIRNKTPPDLWRYVILEQHSTIERRDQDLNTFGPNNIRVPIQRRPRPMMGIPHDCRMARIMQHGQLPDRQDTPAPDIDHQWSQDGYYFRTMGTLKIGIINQQMQMNAWILIRPIGQYITLIMRAIRQTIRKEIMGKLRVNSQDYLSIFIQIHAHGMASLLLGRRQYMGLMAKVKYMARIRRKIRFRPKLRYAAHCRGHTKGDYIMILGVLRIDTIILMIIAKQPPDQYQRRAMDYQPS-----'],
+      dtype='&lt;U683')</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Python">
+<a class="anchor" href="#Python" aria-hidden="true"><span class="octicon octicon-link"></span></a>Python<a class="anchor-link" href="#Python"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>Each GPU consists of several Streaming Multiprocessors (SM). In case of RTX 3090 - we have of them 82.</li>
+<li>Each SM contains CUDA cores. In case of RTX 3090 - we have 128 of them.</li>
+<li>That adds up to 10496 CUDA cores which is roughly equal number of operations that can be run in parallel. </li>
+</ul>
+<p>Interestingly, A100 has only 6912 CUDA cores.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here, we will write CUDA simulator in python, it is slow, but makes it easier to develop.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="n">dim3</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">'dim3'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'x'</span><span class="p">,</span><span class="s1">'y'</span><span class="p">,</span><span class="s1">'z'</span><span class="p">],</span> <span class="n">defaults</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">cdiv</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="s2">"Int ceiling division of `a` over `b`"</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">b</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">blk_kernel2d</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">threads</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i0</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">blocks</span><span class="o">.</span><span class="n">y</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">blocks</span><span class="o">.</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j0</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">threads</span><span class="o">.</span><span class="n">y</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">threads</span><span class="o">.</span><span class="n">x</span><span class="p">):</span> <span class="n">f</span><span class="p">(</span><span class="n">dim3</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span><span class="n">i0</span><span class="p">),</span> <span class="n">dim3</span><span class="p">(</span><span class="n">j1</span><span class="p">,</span><span class="n">j0</span><span class="p">),</span> <span class="n">threads</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_nf</span><span class="p">(</span><span class="n">blockIdx</span><span class="p">,</span> <span class="n">threadIdx</span><span class="p">,</span> <span class="n">blockDim</span><span class="p">,</span> <span class="n">seqs</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">n_seqs</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">):</span>
+    <span class="n">id1</span> <span class="o">=</span> <span class="n">blockIdx</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">blockDim</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">threadIdx</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">id2</span> <span class="o">=</span> <span class="n">blockIdx</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="n">blockDim</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">threadIdx</span><span class="o">.</span><span class="n">x</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">id1</span><span class="o">&gt;=</span><span class="n">n_seqs</span> <span class="ow">or</span> <span class="n">id2</span><span class="o">&gt;=</span><span class="n">n_seqs</span><span class="p">):</span> <span class="k">return</span>
+ 
+    <span class="n">seq1</span> <span class="o">=</span> <span class="n">seqs</span><span class="p">[</span><span class="n">id1</span><span class="p">]</span>
+    <span class="n">seq2</span> <span class="o">=</span> <span class="n">seqs</span><span class="p">[</span><span class="n">id2</span><span class="p">]</span>
+    <span class="n">identity</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">seq_len</span><span class="p">):</span>
+        <span class="n">identity</span> <span class="o">=</span> <span class="n">identity</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">seq1</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">==</span> <span class="n">seq2</span><span class="p">[</span><span class="n">p</span><span class="p">])</span>
+    <span class="n">identity</span> <span class="o">=</span> <span class="n">identity</span><span class="o">/</span><span class="n">seq_len</span>
+
+    <span class="n">is_more</span> <span class="o">=</span> <span class="n">identity</span> <span class="o">&gt;</span> <span class="mf">0.8</span>
+
+    <span class="n">out</span><span class="p">[</span><span class="n">id1</span> <span class="o">*</span> <span class="n">n_seqs</span> <span class="o">+</span> <span class="n">id2</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_more</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">id2</span> <span class="o">*</span> <span class="n">n_seqs</span> <span class="o">+</span> <span class="n">id1</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_more</span>
+    
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">nf_2d</span><span class="p">(</span><span class="n">seqs</span><span class="p">):</span>
+    <span class="n">n_seqs</span>  <span class="o">=</span> <span class="n">seqs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">seq_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seqs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_seqs</span><span class="p">,</span> <span class="n">n_seqs</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">tpb</span> <span class="o">=</span> <span class="n">dim3</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">blocks</span> <span class="o">=</span> <span class="n">dim3</span><span class="p">(</span><span class="n">cdiv</span><span class="p">(</span><span class="n">n_seqs</span><span class="p">,</span> <span class="n">tpb</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">cdiv</span><span class="p">(</span><span class="n">n_seqs</span><span class="p">,</span> <span class="n">tpb</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">blk_kernel2d</span><span class="p">(</span><span class="n">get_nf</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">tpb</span><span class="p">,</span> <span class="n">seqs</span><span class="p">,</span> <span class="n">output</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">n_seqs</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Testing">
+<a class="anchor" href="#Testing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing<a class="anchor-link" href="#Testing"> </a>
+</h3>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">python_mask</span> <span class="o">=</span> <span class="n">nf_2d</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span>
+<span class="n">python_nf</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span> <span class="n">python_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seqs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">python_nf</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>tensor(0.1801, dtype=torch.float64)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>it
+<span class="n">python_mask</span> <span class="o">=</span> <span class="n">nf_2d</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>797 ms ± 5.2 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="CUDA">
+<a class="anchor" href="#CUDA" aria-hidden="true"><span class="octicon octicon-link"></span></a>CUDA<a class="anchor-link" href="#CUDA"> </a>
+</h2>
+<p>Once we have python version, we need to translate this to CUDA/C++ code.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'CUDA_LAUNCH_BLOCKING'</span><span class="p">]</span><span class="o">=</span><span class="s1">'0'</span>
+<span class="kn">from</span> <span class="nn">torch.utils.cpp_extension</span> <span class="kn">import</span> <span class="n">load_inline</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> wurlitzer
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">load_cuda</span><span class="p">(</span><span class="n">cuda_src</span><span class="p">,</span> <span class="n">cpp_src</span><span class="p">,</span> <span class="n">funcs</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s2">"Simple wrapper for torch.utils.cpp_extension.load_inline"</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">name</span> <span class="o">=</span> <span class="n">funcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">flags</span> <span class="o">=</span> <span class="s2">"-O3 -Xptxas -O3 -Xcompiler -O3"</span> <span class="k">if</span> <span class="n">opt</span> <span class="k">else</span> <span class="s2">"-O0 -Xptxas -O0 -Xcompiler -O0"</span>
+    <span class="k">return</span> <span class="n">load_inline</span><span class="p">(</span><span class="n">cuda_sources</span><span class="o">=</span><span class="p">[</span><span class="n">cuda_src</span><span class="p">],</span> <span class="n">cpp_sources</span><span class="o">=</span><span class="p">[</span><span class="n">cpp_src</span><span class="p">],</span> <span class="n">functions</span><span class="o">=</span><span class="n">funcs</span><span class="p">,</span>
+                       <span class="n">extra_cuda_cflags</span><span class="o">=</span><span class="p">[</span><span class="n">flags</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cuda_begin</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">'''</span>
+<span class="s1">#include &lt;torch/extension.h&gt;</span>
+<span class="s1">#include &lt;stdio.h&gt;</span>
+<span class="s1">#include &lt;c10/cuda/CUDAException.h&gt;</span>
+
+<span class="s1">#define CHECK_CUDA(x) TORCH_CHECK(x.device().is_cuda(), #x " must be a CUDA tensor")</span>
+<span class="s1">#define CHECK_CONTIGUOUS(x) TORCH_CHECK(x.is_contiguous(), #x " must be contiguous")</span>
+<span class="s1">#define CHECK_INPUT(x) CHECK_CUDA(x); CHECK_CONTIGUOUS(x)</span>
+<span class="s1">#define CUDA_ERR(ans) { gpuAssert((ans), __FILE__, __LINE__); }</span>
+<span class="s1">inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true)</span>
+<span class="s1">{</span>
+<span class="s1">   if (code != cudaSuccess) </span>
+<span class="s1">   {</span>
+<span class="s1">      fprintf(stderr,"GPUassert: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> </span><span class="si">%d</span><span class="s1">\n", cudaGetErrorString(code), file, line);</span>
+<span class="s1">      if (abort) exit(code);</span>
+<span class="s1">   }</span>
+<span class="s1">}</span>
+<span class="s1">__host__ __device__ inline unsigned int cdiv(unsigned int a, unsigned int b) { return (a+b-1)/b;}</span>
+<span class="s1">'''</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cuda_src</span> <span class="o">=</span> <span class="n">cuda_begin</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">'''</span>
+
+<span class="s1">__device__ float get_identity(uint8_t* seq1, uint8_t* seq2, int seq_len) {</span>
+<span class="s1">    float identity = 0.0f;</span>
+<span class="s1">    for (int p = 0; p &lt; seq_len; ++p) {</span>
+<span class="s1">        identity += (seq1[p] == seq2[p]) ? 1 : 0;</span>
+<span class="s1">    }</span>
+<span class="s1">    return identity / seq_len;</span>
+<span class="s1">}</span>
+
+<span class="s1">__global__ void nf_kernel(uint8_t* seqs, uint8_t* out, int n_seqs, int seq_len) {</span>
+<span class="s1">    int id1 = blockIdx.y * blockDim.y + threadIdx.y;</span>
+<span class="s1">    int id2 = blockIdx.x * blockDim.x + threadIdx.x;</span>
+
+<span class="s1">    if (id1 &gt;= n_seqs || id2 &gt;= n_seqs) return;</span>
+
+<span class="s1">    uint8_t* seq1 = &amp;seqs[id1 * seq_len];</span>
+<span class="s1">    uint8_t* seq2 = &amp;seqs[id2 * seq_len];</span>
+
+<span class="s1">    float identity = get_identity(seq1, seq2, seq_len);</span>
+
+<span class="s1">    bool is_more = identity &gt; 0.8f;</span>
+
+<span class="s1">    out[id1 * n_seqs + id2] = is_more;</span>
+<span class="s1">    out[id2 * n_seqs + id1] = is_more;</span>
+<span class="s1">}</span>
+
+<span class="s1">torch::Tensor get_nf(torch::Tensor input) {</span>
+<span class="s1">    CHECK_INPUT(input);</span>
+<span class="s1">    int n_seqs = input.size(0);</span>
+<span class="s1">    int seq_len = input.size(1);</span>
+<span class="s1">    auto output = torch::empty({n_seqs,n_seqs}, input.options());</span>
+<span class="s1">    dim3 tpb(16,16);</span>
+<span class="s1">    dim3 blocks(cdiv(n_seqs,tpb.x), cdiv(n_seqs,tpb.y));</span>
+<span class="s1">    nf_kernel&lt;&lt;&lt;blocks, tpb&gt;&gt;&gt;(</span>
+<span class="s1">        input.data_ptr&lt;uint8_t&gt;(), output.data_ptr&lt;uint8_t&gt;(), n_seqs, seq_len);</span>
+<span class="s1">    C10_CUDA_KERNEL_LAUNCH_CHECK();</span>
+<span class="s1">    return output;</span>
+<span class="s1">}'''</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">module</span> <span class="o">=</span> <span class="n">load_cuda</span><span class="p">(</span><span class="n">cuda_src</span><span class="p">,</span> <span class="s2">"torch::Tensor get_nf(torch::Tensor input);"</span><span class="p">,</span> <span class="p">[</span><span class="s1">'get_nf'</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Using /home/drepecka/.cache/torch_extensions/py311_cu121 as PyTorch extensions root...
+Detected CUDA files, patching ldflags
+Emitting ninja build file /home/drepecka/.cache/torch_extensions/py311_cu121/get_nf/build.ninja...
+Building extension module get_nf...
+Allowing ninja to set a default number of workers... (overridable by setting the environment variable MAX_JOBS=N)
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>ninja: no work to do.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Loading extension module get_nf...
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_nf_cuda</span><span class="p">(</span><span class="n">seqs</span><span class="p">):</span>
+    <span class="n">seqs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">seqs</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">seqs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">byte</span><span class="p">()</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+    <span class="n">cuda_mask</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">get_nf</span><span class="p">(</span><span class="n">seqs</span><span class="p">)</span>
+    <span class="n">cuda_nf</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">cuda_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seqs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cuda_nf</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cuda_nf</span> <span class="o">=</span> <span class="n">get_nf_cuda</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">2500</span><span class="p">])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_almost_equal</span><span class="p">(</span><span class="n">cuda_nf</span><span class="p">,</span> <span class="mf">19.919439</span><span class="p">,</span> <span class="n">decimal</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>it -n 3 -r 3
+<span class="n">get_nf_cuda</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">2500</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>115 ms ± 9.06 ms per loop (mean ± std. dev. of 3 runs, 3 loops each)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Numba-with-CUDA">
+<a class="anchor" href="#Numba-with-CUDA" aria-hidden="true"><span class="octicon octicon-link"></span></a>Numba with CUDA<a class="anchor-link" href="#Numba-with-CUDA"> </a>
+</h2>
+<p>Numba also allows us to access CUDA and write kernels even without leaving python</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'NUMBA_ENABLE_CUDASIM'</span><span class="p">]</span><span class="o">=</span><span class="s1">'0'</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">cuda</span>
+<span class="n">cuda</span><span class="o">.</span><span class="n">detect</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Found 1 CUDA devices
+id 0    b'NVIDIA GeForce GTX 1650 Ti'                              [SUPPORTED]
+                      Compute Capability: 7.5
+                           PCI Device ID: 0
+                              PCI Bus ID: 1
+                                    UUID: GPU-3f8cf4e0-90bd-e695-da8e-354107ab341b
+                                Watchdog: Enabled
+             FP32/FP64 Performance Ratio: 32
+Summary:
+	1/1 devices are supported
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>True</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">cuda</span>
+<span class="nd">@cuda</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span> <span class="nf">nf_kernel</span><span class="p">(</span><span class="n">seqs</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+
+    <span class="n">id1</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">blockIdx</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">cuda</span><span class="o">.</span><span class="n">blockDim</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">cuda</span><span class="o">.</span><span class="n">threadIdx</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">id2</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">blockIdx</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">cuda</span><span class="o">.</span><span class="n">blockDim</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">cuda</span><span class="o">.</span><span class="n">threadIdx</span><span class="o">.</span><span class="n">x</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">id1</span> <span class="o">&gt;=</span> <span class="n">h</span> <span class="ow">or</span> <span class="n">id2</span> <span class="o">&gt;=</span> <span class="n">h</span><span class="p">):</span> <span class="k">return</span>
+
+    <span class="n">seq1</span> <span class="o">=</span> <span class="n">seqs</span><span class="p">[</span><span class="n">id1</span><span class="p">]</span>
+    <span class="n">seq2</span> <span class="o">=</span> <span class="n">seqs</span><span class="p">[</span><span class="n">id2</span><span class="p">]</span>
+
+
+    <span class="n">identity</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">seq_len</span><span class="p">):</span>
+        <span class="n">identity</span> <span class="o">+=</span> <span class="p">(</span><span class="n">seq1</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">==</span> <span class="n">seq2</span><span class="p">[</span><span class="n">p</span><span class="p">])</span>
+    <span class="n">identity</span> <span class="o">=</span> <span class="n">identity</span> <span class="o">/</span> <span class="n">seq_len</span>
+
+
+    <span class="n">is_more</span> <span class="o">=</span> <span class="n">identity</span> <span class="o">&gt;</span> <span class="mf">0.8</span>
+
+    <span class="n">out</span><span class="p">[</span><span class="n">id1</span><span class="p">,</span> <span class="n">id2</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_more</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">id2</span><span class="p">,</span> <span class="n">id1</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_more</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_nf_numba</span><span class="p">(</span><span class="n">seqs</span><span class="p">):</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">seqs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">tpb</span> <span class="o">=</span> <span class="n">dim3</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
+    <span class="n">blocks</span> <span class="o">=</span> <span class="n">dim3</span><span class="p">(</span><span class="n">cdiv</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">tpb</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">cdiv</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">tpb</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">seqs_cuda_numba</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">seqs</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">h</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">))</span>
+    <span class="n">nf_kernel</span><span class="p">[</span><span class="n">blocks</span><span class="p">,</span> <span class="n">tpb</span><span class="p">](</span><span class="n">seqs_cuda_numba</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">seqs</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">h</span><span class="p">)</span>
+    <span class="n">numba_nf</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">out</span><span class="o">.</span><span class="n">copy_to_host</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">seqs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="k">return</span> <span class="n">numba_nf</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">nf_numba_cuda</span> <span class="o">=</span> <span class="n">get_nf_numba</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">2500</span><span class="p">])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_almost_equal</span><span class="p">(</span><span class="n">nf_numba_cuda</span><span class="p">,</span> <span class="mf">19.919439</span><span class="p">,</span> <span class="n">decimal</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>it -n 3 -r 3
+<span class="n">get_nf_numba</span><span class="p">(</span><span class="n">seqs</span><span class="p">[:</span><span class="mi">2500</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>124 ms ± 7.06 ms per loop (mean ± std. dev. of 3 runs, 3 loops each)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>While Numba is slower, it may be enough for a large number of pratical applications.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Summary">
+<a class="anchor" href="#Summary" aria-hidden="true"><span class="octicon octicon-link"></span></a>Summary<a class="anchor-link" href="#Summary"> </a>
+</h2>
+<p>Now we have these speeds for 2500 sequences of MSA length 683.</p>
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>Time (ms)</th>
+<th>Time (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Numpy</td>
+<td>Singlethreaded</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>Multithreaded</td>
+<td>669</td>
+</tr>
+<tr>
+<td>Numpy</td>
+<td>Multithreaded</td>
+<td>503</td>
+</tr>
+<tr>
+<td>Pytorch</td>
+<td>GPU</td>
+<td>389</td>
+</tr>
+<tr>
+<td>Numba</td>
+<td>Multithreaded + Low precision</td>
+<td>176</td>
+</tr>
+<tr>
+<td>Jax</td>
+<td>GPU</td>
+<td>116</td>
+</tr>
+<tr>
+<td>CUDA</td>
+<td>GPU</td>
+<td>115</td>
+</tr>
+<tr>
+<td>Numba (CUDA)</td>
+<td>GPU</td>
+<td>124</td>
+</tr>
+</tbody>
+</table>
+<p>While this is may not be the most representative case, it still gives some intuition on potential speed improvements. Definitely, pure python is slow, however, I see python as a interface to other languages through various libraries (Numpy, Numba, Jax, Polars). By utilising these libraries, you benefit from well-tested and optimised code, which could take time to achieve when doing from scratch (for example, in C/Rust, etc). In most cases, with some thinking, the problem at hand can be converted to fit the framework of the library. If that does not work or if you really need to optimise every microsecond, then going the lowest level will be always (almost) fastest solution performance wise.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><a class="u-url" href="/donatas.repecka/performance/2024/03/23/performance-cuda.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/donatas.repecka/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/donatas.repecka/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/donatas.repecka/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Blog posts about what interests me</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/donatasrep" target="_blank" title="donatasrep"><svg class="svg-icon grey"><use xlink:href="/donatas.repecka/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/DonatasRepecka" target="_blank" title="DonatasRepecka"><svg class="svg-icon grey"><use xlink:href="/donatas.repecka/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
